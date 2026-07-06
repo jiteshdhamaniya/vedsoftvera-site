@@ -1,46 +1,56 @@
 # Ved Softvera — Static Site
 
-A single-file, static replacement for the WordPress site at vedsoftvera.com.
-No PHP, no database, no plugins, no build step — just `index.html`.
+A **multi-page** static replacement for the WordPress site at vedsoftvera.com.
+No PHP, no database, no plugins, no build step — just HTML + one CSS file.
+
+## Structure
+
+- `index.html` — home
+- `about.html`, `about-us.html`, `contact.html`, `work.html`, `blog.html`, `products.html`, `thank-you.html`
+- Legal: `privacy-policy.html`, `terms-and-conditions.html`, `refund-and-cancellation.html`
+- ~26 service pages (e.g. `laravel-development.html`, `android-app-development.html`, `it-consulting.html`, …)
+- 47 portfolio pages `portfolio-<slug>.html` + `case-study-road-haul-services.html`
+- `styles.css` — the single shared stylesheet (design lives here)
+
+All links are relative, so it works both on a project GitHub Pages subpath
+and at a root domain.
+
+## Content
+
+Page copy is reproduced **verbatim** from the live site. The original
+WordPress install had been hacked and injected with ~14,000 pages of
+multilingual casino/gambling SEO spam — **all of that was excluded**. Only
+genuine Ved Softvera business content was kept. A few source pages were
+entirely spam (`about-us`, `thank-you` was partly spam) and are noted in the
+build; several portfolio items were image-only on the source and were
+rebuilt as clean titled placeholders (no invented copy).
+
+Note: some source pages carry legacy "JD Softvera" / partner boilerplate in
+their own text (privacy, terms, a few service pages). That is what the live
+site actually says, so it was preserved as-is rather than rewritten.
 
 ## Preview locally
 
-Open `index.html` in any browser, or serve the folder:
-
 ```bash
-python3 -m http.server 8000   # then visit http://localhost:8000
+python3 -m http.server 8000   # visit http://localhost:8000
 ```
 
 ## Deploy (all free)
 
-Pick one — each hosts a static folder:
-
+- **GitHub Pages** — already configured for this repo.
 - **Netlify** — drag the folder onto https://app.netlify.com/drop
-- **Cloudflare Pages** — connect a repo or upload the folder
-- **GitHub Pages** — push to a repo, enable Pages on the `main` branch
-- **Vercel** — `vercel` in this folder, or import the repo
-- **Any shared host** — upload `index.html` to the web root via FTP
+- **Cloudflare Pages / Vercel** — connect the repo.
 
-Then point the `vedsoftvera.com` DNS at the new host and cancel the
-WordPress hosting once it's live.
+Point `vedsoftvera.com` DNS at the new host and cancel the WordPress hosting
+once it's live. (Doing this also kills the injected spam farm.)
 
 ## Editing
 
-Everything is in `index.html` — content, styles, and one small script are
-all inline. Search for the text you want to change and edit it directly.
+Design: edit `styles.css` (colors are the `:root { --brand: … }` variables at
+the top). Content: each page is its own `.html` file — edit the text directly.
+The header/footer are duplicated per page; if you change the nav, update it
+across files (or ask and I'll add a small include).
 
-- Company info / services / portfolio: the `<section>` blocks in `<main>`.
-- Colors: the `:root { --brand: ... }` variables near the top of `<style>`.
-- Contact form: currently opens the visitor's email client (`mailto:`).
-  For a real inbox-delivered form with no backend, swap the `<form action>`
-  to a service like Formspree or Web3Forms (one-line change).
-
-## Notes
-
-- Content mirrors the current site: web, mobile, and design services;
-  White Label, IT Consulting, and Prebuilt Designs; selected work
-  (Brandamos, Chipotle, 22 Pushups, Davy Select); and the Jaipur contact
-  details.
-- The blog was WordPress-dynamic and is omitted. If you want a blog on the
-  static site, the simplest path is a Markdown-based static generator
-  (Astro / Eleventy) or an external service — say the word and I'll wire it.
+The contact form currently opens the visitor's email client (`mailto:`). For
+inbox-delivered submissions with no backend, swap the `<form action>` to
+Formspree or Web3Forms — a one-line change.
