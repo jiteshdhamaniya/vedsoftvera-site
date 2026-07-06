@@ -446,3 +446,53 @@ h1, h2, h3, h4, .stat strong, .hero-trust strong, .step .num, .cta-band h2 {
   .process { grid-template-columns: 1fr; }
   .hero-trust { gap: 22px; }
 }
+
+/* ============================================================
+   Hero background animation v2 — living, premium motion
+   ============================================================ */
+.hero { padding: 100px 0 88px; }
+
+/* the dot-grid slowly drifts */
+.hero::before { animation: gridDrift 60s linear infinite; }
+@keyframes gridDrift { to { background-position: 260px 260px; } }
+
+/* three colour-varied aurora blobs, larger + slower drift */
+.blob { opacity: .5; filter: blur(70px); }
+.blob.b1 { width: 520px; height: 520px; background: radial-gradient(circle, #5fa0ff, transparent 66%); top: -140px; right: -80px; animation: float1 20s ease-in-out infinite; }
+.blob.b2 { width: 420px; height: 420px; background: radial-gradient(circle, #66ecff, transparent 66%); bottom: -170px; left: -90px; animation: float2 24s ease-in-out infinite; }
+.blob.b3 { width: 360px; height: 360px; background: radial-gradient(circle, #a78bfa, transparent 66%); top: 30%; left: 42%; opacity: .32; animation: float3 28s ease-in-out infinite; }
+@keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-44px,34px) scale(1.08)} }
+@keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(40px,-30px) scale(1.1)} }
+@keyframes float3 { 0%,100%{transform:translate(0,0)} 33%{transform:translate(38px,26px)} 66%{transform:translate(-30px,18px)} }
+
+/* animated shimmer sweeping through the gradient headline word */
+.hero-copy h1 .grad {
+  background: linear-gradient(100deg, var(--brand) 0%, #17a0d8 30%, #6aa8ff 50%, #17a0d8 70%, var(--brand) 100%);
+  background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+@keyframes shimmer { to { background-position: -250% center; } }
+
+/* slowly rotating conic glow behind the product mockup */
+.hero-visual { z-index: 1; }
+.hero-visual::before {
+  content: ""; position: absolute; inset: -14% -10%; z-index: 0; border-radius: 34px;
+  background: conic-gradient(from 0deg, rgba(22,87,208,.16), rgba(23,160,216,.14), rgba(167,139,250,.14), rgba(22,87,208,.16));
+  filter: blur(46px); animation: spin 26s linear infinite;
+}
+.mock, .chip { position: relative; z-index: 2; }
+
+/* soft sheen crossing the mockup */
+.mock { overflow: hidden; }
+.mock::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%; z-index: 4;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.32), transparent);
+  transform: skewX(-18deg); animation: sheen 6.5s ease-in-out infinite;
+}
+@keyframes sheen { 0%,60%{left:-60%} 85%,100%{left:130%} }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .hero::before, .hero-visual::before, .hero-copy h1 .grad, .chip, .mock::after, .marquee .row { animation: none !important; }
+  .hero-copy h1 .grad { background-position: 0 0; }
+}
