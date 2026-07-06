@@ -351,3 +351,98 @@ footer .logo-img { filter: brightness(0) invert(1); opacity: .92; }
 
 /* Stat / trust band tweaks */
 .stat strong { background: linear-gradient(120deg, var(--brand), #17a0d8); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 26px; }
+
+/* ============================================================
+   Creative layer — display type, motion, bento, mockups
+   ============================================================ */
+h1, h2, h3, h4, .stat strong, .hero-trust strong, .step .num, .cta-band h2 {
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Animated underline on top-level nav links */
+.nav-links > a { position: relative; }
+.nav-links > a::after { content: ""; position: absolute; left: 0; bottom: -22px; height: 2px; width: 0; background: var(--brand); transition: width .25s ease; }
+.nav-links > a:hover::after { width: 100%; }
+
+/* ---------- Creative hero ---------- */
+.hero { padding: 84px 0 76px; }
+.hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+.hero .badge {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
+  padding: 7px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+  color: var(--brand); background: #eaf1fe; border: 1px solid #d5e4fd; letter-spacing: .02em;
+}
+.hero .badge b { color: var(--accent); }
+.hero-copy h1 { font-size: clamp(34px, 4.6vw, 54px); line-height: 1.08; max-width: 14ch; }
+.hero-copy .lead { max-width: 52ch; }
+.hero-trust { display: flex; gap: 34px; margin-top: 40px; padding-top: 26px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.hero-trust strong { display: block; font-size: 24px; color: var(--ink); }
+.hero-trust span { font-size: 13.5px; color: var(--muted); }
+
+/* Aurora blobs */
+.blob { position: absolute; border-radius: 50%; filter: blur(60px); z-index: 0; opacity: .5; pointer-events: none; }
+.blob.b1 { width: 460px; height: 460px; background: radial-gradient(circle, #7db4ff, transparent 65%); top: -120px; right: -60px; animation: float1 14s ease-in-out infinite; }
+.blob.b2 { width: 380px; height: 380px; background: radial-gradient(circle, #9be7ff, transparent 65%); bottom: -140px; left: -80px; animation: float2 17s ease-in-out infinite; }
+@keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,26px)} }
+@keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-24px)} }
+
+/* Product mockup */
+.hero-visual { position: relative; }
+.mock { transform: perspective(1400px) rotateY(-14deg) rotateX(5deg); transform-style: preserve-3d; box-shadow: 0 40px 80px rgba(14,28,61,.22); transition: transform .5s ease; }
+.hero-visual:hover .mock { transform: perspective(1400px) rotateY(-7deg) rotateX(2deg); }
+.mock .browser-view { max-height: 430px; }
+.chip {
+  position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 7px;
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow);
+  padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 13.5px; color: var(--ink);
+}
+.chip-1 { top: 24px; left: -26px; animation: bob 4s ease-in-out infinite; }
+.chip-2 { bottom: 34px; right: -22px; animation: bob 5s ease-in-out infinite .6s; }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+/* ---------- Marquee tech strip ---------- */
+.marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-soft); overflow: hidden; padding: 20px 0; }
+.marquee .row { display: flex; align-items: center; gap: 0; width: max-content; animation: scroll 26s linear infinite; }
+.marquee:hover .row { animation-play-state: paused; }
+.marquee .row span { color: var(--muted); font-weight: 700; font-size: 16px; padding: 0 30px; white-space: nowrap; }
+.marquee .row span::after { content: "•"; color: #c7d2e4; margin-left: 30px; }
+@keyframes scroll { to { transform: translateX(-50%); } }
+
+/* ---------- Bento services ---------- */
+.bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.bento .b1 { grid-column: span 2; }
+.bento .b6 { grid-column: span 3; display: flex; align-items: center; gap: 24px; }
+.bento .b6 .ico { margin-bottom: 0; }
+.bento .card.big-tint { background: linear-gradient(135deg, #0d1a37, #17307a); color: #cdd9f0; border-color: transparent; }
+.bento .card.big-tint h3 { color: #fff; }
+.bento .card.big-tint p { color: #a9b8d6; }
+.bento .card.big-tint .ico { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); color: #fff; }
+.bento .card.big-tint::before { background: linear-gradient(90deg,#fff,#8fd0ff); }
+
+/* ---------- Process timeline ---------- */
+.process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; position: relative; }
+.process::before { content: ""; position: absolute; top: 34px; left: 8%; right: 8%; height: 2px; background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 16px); z-index: 0; }
+.step { position: relative; z-index: 1; text-align: center; }
+.step .num { width: 68px; height: 68px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 20px; font-size: 26px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--brand), #17a0d8); box-shadow: 0 12px 26px rgba(22,87,208,.28); }
+.step h3 { font-size: 18px; margin-bottom: 6px; }
+.step p { font-size: 14px; color: var(--muted); margin: 0; }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { order: -1; }
+  .mock { transform: none; }
+  .hero-visual:hover .mock { transform: none; }
+  .chip-1 { left: 8px; } .chip-2 { right: 8px; }
+  .bento { grid-template-columns: 1fr 1fr; }
+  .bento .b1, .bento .b6 { grid-column: span 2; }
+  .bento .b6 { flex-direction: column; text-align: center; align-items: flex-start; }
+  .process { grid-template-columns: 1fr 1fr; gap: 30px 22px; }
+  .process::before { display: none; }
+}
+@media (max-width: 620px) {
+  .bento { grid-template-columns: 1fr; }
+  .bento .b1, .bento .b6 { grid-column: span 1; }
+  .process { grid-template-columns: 1fr; }
+  .hero-trust { gap: 22px; }
+}
