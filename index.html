@@ -278,6 +278,52 @@
       }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
       targets.forEach(function (el) { io.observe(el); });
     } else { targets.forEach(function (el) { el.classList.add('in'); }); }
+
+    // Interactive parallax tilt on the hero mockup (desktop, motion-safe)
+    (function () {
+      var vis = document.querySelector('.hero-visual');
+      var mock = vis && vis.querySelector('.mock');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (!mock || reduce || !fine) return;
+      var raf;
+      vis.addEventListener('mousemove', function (e) {
+        var r = vis.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(function () {
+          mock.style.transition = 'transform .12s ease-out';
+          mock.style.transform = 'perspective(1400px) rotateY(' + (-14 + px * 12) + 'deg) rotateX(' + (5 - py * 12) + 'deg)';
+        });
+      });
+      vis.addEventListener('mouseleave', function () {
+        mock.style.transition = 'transform .5s ease';
+        mock.style.transform = '';
+      });
+    })();
+
+    // Count-up for the hero stat (e.g. 47+)
+    (function () {
+      var el = document.querySelector('.hero-trust strong');
+      if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var m = /(\d+)/.exec(el.textContent); if (!m) return;
+      var target = +m[1], suffix = el.textContent.replace(/\d+/, ''), ran = false;
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (en.isIntersecting && !ran) {
+            ran = true; var dur = 1200, s = null;
+            requestAnimationFrame(function run(ts) {
+              if (s === null) s = ts;
+              var p = Math.min((ts - s) / dur, 1);
+              el.textContent = Math.round(target * (0.5 - Math.cos(Math.PI * p) / 2)) + suffix;
+              if (p < 1) requestAnimationFrame(run);
+            });
+          }
+        });
+      }, { threshold: 0.6 });
+      io.observe(el);
+    })();
   </script>
 </body>
 </html>
