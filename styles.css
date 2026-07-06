@@ -496,3 +496,26 @@ h1, h2, h3, h4, .stat strong, .hero-trust strong, .step .num, .cta-band h2 {
   .blob, .hero::before, .hero-visual::before, .hero-copy h1 .grad, .chip, .mock::after, .marquee .row { animation: none !important; }
   .hero-copy h1 .grad { background-position: 0 0; }
 }
+
+/* ============================================================
+   Dark hero variant (home only) — dramatic, premium.
+   Self-contained block: delete to revert to the light hero.
+   ============================================================ */
+.hero {
+  background:
+    radial-gradient(900px 520px at 82% -12%, rgba(23,160,216,.30), transparent 60%),
+    radial-gradient(760px 520px at 8% 116%, rgba(79,140,255,.24), transparent 60%),
+    linear-gradient(160deg, #0b1533, #0d1a37 55%, #0a1230);
+  border-bottom-color: #1b2b4d;
+}
+.hero::before { background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px); opacity: .55; }
+.hero-copy h1 { color: #fff; }
+.hero-copy h1 .grad { background: linear-gradient(100deg, #5fa8ff, #64f0ff, #9db8ff, #64f0ff, #5fa8ff); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .badge { background: rgba(255,255,255,.08); color: #cfe0ff; border-color: rgba(255,255,255,.18); }
+.hero-copy .lead { color: #b9c6de; }
+.hero-trust { border-top-color: rgba(255,255,255,.15); }
+.hero-trust strong { color: #fff; }
+.hero-trust span { color: #93a4c4; }
+.hero .btn-ghost { background: rgba(255,255,255,.06); color: #eaf1ff; border-color: rgba(255,255,255,.22); }
+.hero .btn-ghost:hover { background: rgba(255,255,255,.13); border-color: #fff; color: #fff; }
+.blob.b1 { opacity: .5; } .blob.b2 { opacity: .5; } .blob.b3 { opacity: .4; }
