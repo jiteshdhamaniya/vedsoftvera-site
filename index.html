@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ved Softvera — Web & Mobile Design and Development</title>
+  <meta name="description" content="Ved Softvera helps you convert more with expert web and mobile design and development — web applications, Laravel, WordPress, native and hybrid apps, and UI/UX.">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg-soft: #111a2e;
+      --panel: #131d33;
+      --line: #223252;
+      --ink: #eef2fb;
+      --muted: #93a3c4;
+      --brand: #4f8cff;
+      --brand-2: #22d3ee;
+      --accent: #f59e0b;
+      --radius: 14px;
+      --shadow: 0 24px 60px rgba(3, 8, 20, 0.45);
+      --max: 1140px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 14px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--brand-2);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(34, 211, 238, 0.06);
+    }
+
+    h1, h2, h3 { line-height: 1.15; margin: 0 0 14px; font-weight: 800; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(26px, 3.6vw, 38px); }
+    p { margin: 0 0 16px; color: var(--muted); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #04122b; }
+    .btn-ghost { border-color: var(--line); color: var(--ink); background: rgba(255,255,255,0.02); }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 18, 32, 0.82);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 19px; letter-spacing: -0.02em; }
+    .logo-mark {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      border-radius: 9px; font-size: 15px; color: #04122b;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+    .logo span { color: var(--brand-2); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--muted); font-weight: 600; font-size: 15px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { display: flex; align-items: center; gap: 14px; }
+    .menu-toggle {
+      display: none; background: none; border: 1px solid var(--line);
+      color: var(--ink); width: 42px; height: 42px; border-radius: 10px; cursor: pointer;
+    }
+
+    /* Hero */
+    .hero { position: relative; padding: 92px 0 80px; overflow: hidden; }
+    .hero::before {
+      content: ""; position: absolute; inset: -40% 30% auto auto; width: 620px; height: 620px;
+      background: radial-gradient(circle, rgba(79,140,255,0.28), transparent 60%); filter: blur(10px); z-index: 0;
+    }
+    .hero::after {
+      content: ""; position: absolute; inset: auto auto -30% -20%; width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(34,211,238,0.18), transparent 60%); z-index: 0;
+    }
+    .hero .wrap { position: relative; z-index: 1; }
+    .hero h1 { font-size: clamp(34px, 5.4vw, 60px); font-weight: 900; max-width: 15ch; }
+    .hero h1 .grad {
+      background: linear-gradient(120deg, var(--brand), var(--brand-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p.lead { font-size: clamp(17px, 2vw, 20px); max-width: 56ch; margin-bottom: 30px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .stats { display: flex; gap: 40px; margin-top: 54px; flex-wrap: wrap; }
+    .stat strong { display: block; font-size: 30px; font-weight: 900; color: var(--ink); }
+    .stat span { color: var(--muted); font-size: 14px; }
+
+    /* Sections */
+    section { padding: 84px 0; }
+    .section-head { max-width: 640px; margin-bottom: 44px; }
+    .section-head.center { margin-inline: auto; text-align: center; }
+
+    /* Services grid */
+    .grid { display: grid; gap: 22px; }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: transform 0.18s ease, border-color 0.2s ease;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--brand); }
+    .card .ico {
+      width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 18px;
+      border-radius: 12px; font-size: 22px;
+      background: rgba(79,140,255,0.12); border: 1px solid var(--line);
+    }
+    .card h3 { font-size: 20px; }
+    .card p { margin-bottom: 0; font-size: 15px; }
+    .card ul { margin: 12px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+    .card ul li { margin-bottom: 4px; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+    .about-panel {
+      background: linear-gradient(160deg, var(--bg-soft), var(--panel));
+      border: 1px solid var(--line); border-radius: 20px; padding: 34px; box-shadow: var(--shadow);
+    }
+    .check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+    .check-list li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-weight: 600; }
+    .check-list .tick {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+      background: rgba(34,211,238,0.15); color: var(--brand-2); font-size: 13px; font-weight: 800;
+    }
+    .check-list small { display: block; color: var(--muted); font-weight: 400; }
+
+    /* Work */
+    .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .work-card {
+      border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--panel);
+      transition: transform 0.18s ease, border-color 0.2s ease;
+    }
+    .work-card:hover { transform: translateY(-4px); border-color: var(--brand-2); }
+    .work-thumb { height: 150px; display: grid; place-items: center; font-size: 30px; font-weight: 900; color: #04122b; }
+    .work-body { padding: 20px 22px 24px; }
+    .work-body h3 { font-size: 18px; margin-bottom: 6px; }
+    .work-body p { margin: 0; font-size: 14px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tag { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: rgba(79,140,255,0.12); color: #a8c4ff; }
+
+    /* CTA band */
+    .cta-band {
+      background: linear-gradient(120deg, var(--brand), var(--brand-2));
+      border-radius: 22px; padding: 48px; text-align: center; color: #04122b; box-shadow: var(--shadow);
+    }
+    .cta-band h2 { color: #04122b; }
+    .cta-band p { color: #063056; opacity: 0.85; max-width: 52ch; margin-inline: auto; }
+    .cta-band .btn-ghost { border-color: rgba(4,18,43,0.35); color: #04122b; background: rgba(255,255,255,0.25); }
+
+    /* Contact */
+    .contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; }
+    .contact-info { display: grid; gap: 22px; align-content: start; }
+    .info-item { display: flex; gap: 14px; align-items: flex-start; }
+    .info-item .ico {
+      width: 44px; height: 44px; flex-shrink: 0; border-radius: 11px; display: grid; place-items: center;
+      background: rgba(79,140,255,0.12); border: 1px solid var(--line); font-size: 19px;
+    }
+    .info-item strong { display: block; color: var(--ink); font-size: 15px; }
+    .info-item a, .info-item span { color: var(--muted); font-size: 15px; }
+    .info-item a:hover { color: var(--brand-2); }
+
+    form { display: grid; gap: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 30px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    label { font-size: 13px; font-weight: 700; color: var(--muted); display: grid; gap: 7px; }
+    input, textarea, select {
+      font: inherit; width: 100%; padding: 12px 14px; border-radius: 10px;
+      background: var(--bg-soft); border: 1px solid var(--line); color: var(--ink);
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brand); }
+    textarea { resize: vertical; min-height: 120px; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* Tech strip */
+    .tech-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-soft); }
+    .tech-strip .wrap { display: flex; align-items: center; gap: 12px 40px; flex-wrap: wrap; justify-content: center; padding: 26px 0; }
+    .tech-strip span { color: var(--muted); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; opacity: 0.75; transition: opacity 0.2s, color 0.2s; }
+    .tech-strip span:hover { opacity: 1; color: var(--brand-2); }
+    .tech-strip .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.6; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--line); background: var(--bg-soft); padding: 56px 0 28px; }
+    .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 34px; }
+    .foot-grid h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 16px; }
+    .foot-grid a, .foot-grid p { color: var(--muted); font-size: 14px; margin: 0 0 10px; display: block; transition: color 0.2s; }
+    .foot-grid a:hover { color: var(--ink); }
+    .foot-bottom {
+      margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 13px;
+    }
+    .socials { display: flex; gap: 10px; }
+    .socials a {
+      width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line);
+      display: grid; place-items: center; color: var(--muted); font-size: 14px; font-weight: 700;
+    }
+    .socials a:hover { color: var(--brand-2); border-color: var(--brand-2); }
+
+    @media (max-width: 940px) {
+      .grid-3, .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .foot-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+        position: absolute; top: 72px; left: 0; right: 0; padding: 16px 20px 22px;
+        background: var(--bg); border-bottom: 1px solid var(--line);
+      }
+      .nav-links.open a { padding: 10px 0; width: 100%; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-cta .btn { display: none; }
+      .grid-3, .grid-2, .work-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      section { padding: 60px 0; }
+      .cta-band { padding: 34px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="#top"><span class="logo-mark">VS</span>Ved <span>Softvera</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#services">Web</a>
+        <a href="#services">Mobile</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="#contact">Free Quote</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow">Web &amp; Mobile · Design &amp; Development</span>
+        <h1>We help you <span class="grad">convert more</span> with design &amp; development expertise.</h1>
+        <p class="lead">Ved Softvera is a web and mobile studio that turns your vision into fast, modern products — from web applications and websites to native and hybrid mobile apps.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contact">Request a Free Quote</a>
+          <a class="btn btn-ghost" href="#work">See Our Work</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>Web</strong><span>Applications &amp; websites</span></div>
+          <div class="stat"><strong>Mobile</strong><span>iOS · Android · Hybrid</span></div>
+          <div class="stat"><strong>Design</strong><span>UI/UX that converts</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech strip -->
+    <div class="tech-strip">
+      <div class="wrap reveal">
+        <span class="label">Built with</span>
+        <span>Laravel</span>
+        <span>PHP</span>
+        <span>JavaScript</span>
+        <span>React</span>
+        <span>WordPress</span>
+        <span>Android</span>
+        <span>iOS</span>
+        <span>Flutter</span>
+      </div>
+    </div>
+
+    <!-- About -->
+    <section id="about">
+      <div class="wrap about-grid">
+        <div>
+          <span class="eyebrow">About Us</span>
+          <h2>A design &amp; development team focused on outcomes.</h2>
+          <p>We specialize in web and mobile UI design with a focus on translating your vision into polished visual formats — then engineering it into reliable, scalable software. Whether you need a marketing site, a web application, or a mobile app, we take it from concept to launch.</p>
+          <p>Based in Jaipur, we work with founders and businesses to build online presence that actually drives conversions.</p>
+          <a class="btn btn-ghost" href="#services">Explore Services</a>
+        </div>
+        <div class="about-panel">
+          <ul class="check-list">
+            <li><span class="tick">✓</span><span>Custom Website Development<small>Hand-built, fast, and easy to maintain — no bloated page builders.</small></span></li>
+            <li><span class="tick">✓</span><span>Web Application Development<small>Laravel and modern stacks for real business logic.</small></span></li>
+            <li><span class="tick">✓</span><span>Native &amp; Hybrid Mobile Apps<small>Android, iPhone, and cross-platform builds.</small></span></li>
+            <li><span class="tick">✓</span><span>UI/UX Design<small>Interfaces designed to convert, not just to look good.</small></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" style="background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+      <div class="wrap">
+        <div class="section-head center">
+          <span class="eyebrow">What We Do</span>
+          <h2>Services built around your product</h2>
+          <p>End-to-end capability across design, web, and mobile — plus the extras that help agencies and businesses scale.</p>
+        </div>
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="ico">🎨</div>
+            <h3>Design</h3>
+            <p>Web and mobile UI design that translates your vision into clear, converting visual formats.</p>
+            <ul>
+              <li>Web &amp; mobile UI/UX</li>
+              <li>Prebuilt designs</li>
+              <li>Brand-fit layouts</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="ico">💻</div>
+            <h3>Web Development</h3>
+            <p>Web applications, websites, and software solutions that strengthen your online presence.</p>
+            <ul>
+              <li>Custom website development</li>
+              <li>Web application development</li>
+              <li>Laravel development</li>
+              <li>WordPress services</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="ico">📱</div>
+            <h3>Mobile Development</h3>
+            <p>Native and hybrid applications built with modern technologies for Android and iPhone.</p>
+            <ul>
+              <li>App development (Android / iPhone)</li>
+              <li>Hybrid apps</li>
+              <li>Game development</li>
+              <li>Mobile UI/UX</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="ico">🏷️</div>
+            <h3>White Label</h3>
+            <p>Development capacity you can put your own brand on — deliver more to your clients without growing your team.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🧭</div>
+            <h3>IT Consulting</h3>
+            <p>Guidance on technology choices, architecture, and roadmaps so you invest in the right build.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⚡</div>
+            <h3>Prebuilt Designs</h3>
+            <p>Ready-to-customize templates and design systems to launch quality products faster.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work -->
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head center">
+          <span class="eyebrow">Selected Work</span>
+          <h2>Products we've helped build</h2>
+        </div>
+        <div class="work-grid">
+          <div class="work-card">
+            <div class="work-thumb" style="background: linear-gradient(135deg, #4f8cff, #22d3ee);">B</div>
+            <div class="work-body">
+              <h3>Brandamos</h3>
+              <p>Marketing website with a custom front end and interactive components.</p>
+              <div class="tag-row"><span class="tag">WordPress</span><span class="tag">jQuery</span></div>
+            </div>
+          </div>
+          <div class="work-card">
+            <div class="work-thumb" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">C</div>
+            <div class="work-body">
+              <h3>Chipotle</h3>
+              <p>Web experience work focused on clean UI and responsive layout.</p>
+              <div class="tag-row"><span class="tag">Web</span><span class="tag">UI/UX</span></div>
+            </div>
+          </div>
+          <div class="work-card">
+            <div class="work-thumb" style="background: linear-gradient(135deg, #22d3ee, #34d399);">22</div>
+            <div class="work-body">
+              <h3>22 Pushups</h3>
+              <p>Cross-platform mobile app delivered for both iOS and Android.</p>
+              <div class="tag-row"><span class="tag">iOS</span><span class="tag">Android</span></div>
+            </div>
+          </div>
+          <div class="work-card">
+            <div class="work-thumb" style="background: linear-gradient(135deg, #6366f1, #4f8cff);">D</div>
+            <div class="work-body">
+              <h3>Davy Select</h3>
+              <p>Trading platform application built with modern mobile technologies.</p>
+              <div class="tag-row"><span class="tag">Mobile</span><span class="tag">Fintech</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section style="padding-top: 0;">
+      <div class="wrap">
+        <div class="cta-band">
+          <h2>Have a project in mind?</h2>
+          <p>Tell us what you're building and we'll send back a free, no-obligation quote and a suggested approach.</p>
+          <div style="margin-top: 22px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+            <a class="btn btn-ghost" href="#contact">Request Free Quote</a>
+            <a class="btn btn-ghost" href="mailto:vedsoftvera@gmail.com">Email Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" style="background: var(--bg-soft); border-top: 1px solid var(--line);">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Get In Touch</span>
+          <h2>Let's talk about your product</h2>
+          <p>Reach us directly or send a message — we typically reply within one business day.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="info-item">
+              <div class="ico">📍</div>
+              <div><strong>Office</strong><span>A-72, Ayodhaya Nagar, Gandhi Path, Lalarpura, Vaishali Nagar, Jaipur, Rajasthan 302021</span></div>
+            </div>
+            <div class="info-item">
+              <div class="ico">✉️</div>
+              <div><strong>Email</strong><a href="mailto:vedsoftvera@gmail.com">vedsoftvera@gmail.com</a></div>
+            </div>
+            <div class="info-item">
+              <div class="ico">📞</div>
+              <div><strong>Phone</strong><a href="tel:+919799921060">+91 97999 21060</a></div>
+            </div>
+          </div>
+
+          <!-- No backend needed: submits via the visitor's email client. -->
+          <form action="mailto:vedsoftvera@gmail.com" method="post" enctype="text/plain">
+            <div class="form-row">
+              <label>Name<input type="text" name="Name" placeholder="Your name" required></label>
+              <label>Email<input type="email" name="Email" placeholder="you@company.com" required></label>
+            </div>
+            <label>Service<select name="Service">
+              <option>Web Development</option>
+              <option>Mobile App</option>
+              <option>UI/UX Design</option>
+              <option>White Label</option>
+              <option>IT Consulting</option>
+              <option>Other</option>
+            </select></label>
+            <label>Message<textarea name="Message" placeholder="Tell us about your project…" required></textarea></label>
+            <button class="btn btn-primary" type="submit" style="justify-content:center;">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="logo" href="#top" style="margin-bottom:16px;"><span class="logo-mark">VS</span>Ved <span>Softvera</span></a>
+          <p>We help you convert more by using our design and development expertise. Web and mobile, from concept to launch.</p>
+          <div class="socials">
+            <a href="mailto:vedsoftvera@gmail.com" aria-label="Email">@</a>
+            <a href="tel:+919799921060" aria-label="Phone">☎</a>
+          </div>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <a href="#services">Web Development</a>
+          <a href="#services">Mobile Apps</a>
+          <a href="#services">UI/UX Design</a>
+          <a href="#services">White Label</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#contact">Contact</a>
+          <a href="#contact">Free Quote</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Jaipur, Rajasthan</p>
+          <a href="mailto:vedsoftvera@gmail.com">vedsoftvera@gmail.com</a>
+          <a href="tel:+919799921060">+91 97999 21060</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span id="year"></span> Ved Softvera. All rights reserved.</span>
+        <span>Built as a static site — no WordPress required.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    var toggle = document.getElementById('menuToggle');
+    var links = document.getElementById('navLinks');
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    // Current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll reveal — auto-tag key blocks, then fade them up on enter
+    var revealSelector = '.section-head, .card, .work-card, .about-panel, .about-grid > div, .cta-band, .contact-info, #contact form, .hero .wrap > *';
+    var targets = Array.prototype.slice.call(document.querySelectorAll(revealSelector));
+    targets.forEach(function (el) { el.classList.add('reveal'); });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry, i) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            setTimeout(function () { el.classList.add('in'); }, (i % 6) * 70);
+            io.unobserve(el);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      targets.forEach(function (el) { io.observe(el); });
+      document.querySelectorAll('.tech-strip .reveal').forEach(function (el) { io.observe(el); });
+    } else {
+      targets.forEach(function (el) { el.classList.add('in'); });
+    }
+  </script>
+</body>
+</html>
