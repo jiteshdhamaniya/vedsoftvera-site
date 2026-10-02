@@ -16,11 +16,29 @@ Verified migration date: 2026-10-02. Recheck live configuration before future ch
 
 ## Deployment
 
-Manual static deployment from this repository. There is no GitHub Actions workflow deploying this site to the VPS; the existing GitHub Pages job is a separate preview.
+GitHub Actions `.github/workflows/deploy.yml` validates pull requests and automatically deploys pushes to `main`. Manual dispatch is supported only for `main`. GitHub-hosted Ubuntu runners perform packaging and deployment; the existing GitHub Pages job is a separate preview.
+
+Repository variables:
+
+- `DEPLOY_HOST=178.104.104.20`
+- `DEPLOY_DOMAIN=vedsoftvera.com`
+- `DEPLOY_PATH=/var/www/vedsoftvera`
+- `DEPLOY_USER=deploy-vedsoftvera`
+
+The repository secret `DEPLOY_SSH_KEY` holds a dedicated deployment key. Its public key authenticates only as the non-sudo `deploy-vedsoftvera` user, which owns this site's directory. SSH forwarding and PTY allocation are disabled. `.github/known_hosts` pins the destination's Ed25519 host key verified through the administrative SSH connection. Never disable host-key checking.
+
+The workflow stages only public root files and approved asset types, excludes internal documentation and Git metadata, rejects hidden/symlinked assets, synchronises with 755 directory / 644 file permissions, and verifies SHA-256 checksums for every published file. It records the successful release SHA at `/var/lib/deploy-vedsoftvera/.deployed-sha` and compares both apex/www public HTTPS homepages with the release source.
 
 The active source is `jiteshdhamaniya/vedsoftvera-site`, not the legacy WordPress repository `jiteshdhamaniya/vedsoftvera.com` or the separate `vedsoftvera-new` implementation.
 
-For a reviewed and authorised release, stage the public files only (HTML/CSS and `assets/`) into a clean temporary directory. Compare that staged manifest with the intended release, then use the existing administrative SSH connection to synchronise that directory to `/var/www/vedsoftvera/`, preserving readable 755 directory and 644 file permissions. Confirm the exact destination before using rsync deletion. Never publish `.git`, credentials, server backups, or internal operational documentation. No PHP or database migration is required.
+Use the workflow for normal releases. Before merging, run:
+
+```sh
+python3 .github/scripts/test_prepare_site.py
+python3 .github/scripts/prepare-site.py --output /tmp/vedsoftvera-public --manifest /tmp/vedsoftvera-public.sha256
+```
+
+Choose fresh output paths; existing paths are rejected. For an authorised emergency manual release, use the same staging script and dedicated deployment account. Confirm the exact destination before using rsync deletion. Never publish `.git`, credentials, server backups, or internal operational documentation. No PHP or database migration is required.
 
 ## DNS and HTTPS
 
