@@ -35,14 +35,13 @@ site actually says, so it was preserved as-is rather than rewritten.
 python3 -m http.server 8000   # visit http://localhost:8000
 ```
 
-## Deploy (all free)
+## Production hosting and deployment
 
-- **GitHub Pages** — already configured for this repo.
-- **Netlify** — drag the folder onto https://app.netlify.com/drop
-- **Cloudflare Pages / Vercel** — connect the repo.
+Production runs on `178.104.104.20` (`ai-sales`), with Nginx serving `/var/www/vedsoftvera` for https://vedsoftvera.com/ and https://www.vedsoftvera.com/.
 
-Point `vedsoftvera.com` DNS at the new host and cancel the WordPress hosting
-once it's live. (Doing this also kills the injected spam farm.)
+Read [AGENTS.md](AGENTS.md) and [deploy/SERVER.md](deploy/SERVER.md) before deployment or server changes. This repository is the active static site source; the similarly named WordPress and Next.js repositories are not this production deployment.
+
+Deploy reviewed static files manually using the existing authorised SSH access and the runbook. The GitHub Pages job is a separate preview and does not deploy the VPS. Do not deploy this site to the former Contabo origin `109.123.253.23`.
 
 ## Editing
 
