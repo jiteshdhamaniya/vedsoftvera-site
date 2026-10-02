@@ -1,0 +1,79 @@
+name: Validate and deploy production website
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vedsoftvera-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Test production packaging boundaries
+        run: python3 .github/scripts/test_prepare_site.py
+      - name: Validate and stage public files
+        run: python3 .github/scripts/prepare-site.py --output "$RUNNER_TEMP/public-site" --manifest "$RUNNER_TEMP/site.sha256"
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_DOMAIN: ${{ vars.DEPLOY_DOMAIN }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Validate production destination
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$DEPLOY_HOST" == '178.104.104.20' ]]
+          [[ "$DEPLOY_DOMAIN" == 'vedsoftvera.com' ]]
+          [[ "$DEPLOY_PATH" == '/var/www/vedsoftvera' ]]
+          [[ "$DEPLOY_USER" == 'deploy-vedsoftvera' ]]
+      - name: Stage public files
+        run: python3 .github/scripts/prepare-site.py --output "$RUNNER_TEMP/public-site" --manifest "$RUNNER_TEMP/site.sha256"
+      - name: Configure deployment SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -eu
+          test -n "$DEPLOY_SSH_KEY"
+          install -d -m 700 "$RUNNER_TEMP/deploy-ssh"
+          umask 077
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$RUNNER_TEMP/deploy-ssh/key"
+          cp .github/known_hosts "$RUNNER_TEMP/deploy-ssh/known_hosts"
+      - name: Deploy and verify every published file
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh_options=(-i "$RUNNER_TEMP/deploy-ssh/key" -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/deploy-ssh/known_hosts")
+          export RSYNC_RSH="ssh -i $RUNNER_TEMP/deploy-ssh/key -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/deploy-ssh/known_hosts"
+          rsync --archive --no-owner --no-group --delete --delete-delay --delay-updates --chmod=D755,F644 "$RUNNER_TEMP/public-site/" "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+          ssh "${ssh_options[@]}" "$DEPLOY_USER@$DEPLOY_HOST" "cd '$DEPLOY_PATH' && sha256sum --check --quiet -" < "$RUNNER_TEMP/site.sha256"
+      - name: Verify HTTPS from the new origin and public domains
+        shell: bash
+        run: |
+          set -euo pipefail
+          for domain in "$DEPLOY_DOMAIN" "www.$DEPLOY_DOMAIN"; do
+            curl --fail --silent --show-error --resolve "$domain:443:$DEPLOY_HOST" "https://$domain/" --output "$RUNNER_TEMP/origin.html"
+            cmp "$RUNNER_TEMP/public-site/index.html" "$RUNNER_TEMP/origin.html"
+            curl --fail --silent --show-error "https://$domain/" --output "$RUNNER_TEMP/public.html"
+            cmp "$RUNNER_TEMP/public-site/index.html" "$RUNNER_TEMP/public.html"
+          done
+          ssh -i "$RUNNER_TEMP/deploy-ssh/key" -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/deploy-ssh/known_hosts" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' '$GITHUB_SHA' > ~/.deployed-sha"
+      - name: Remove temporary SSH key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/deploy-ssh/key"
